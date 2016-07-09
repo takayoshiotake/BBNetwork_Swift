@@ -82,7 +82,7 @@ public class TCPServer {
             addr.sin_port = System.htons(port)
             addr.sin_addr.s_addr = in_addr_t(System.htonl(INADDR_ANY))
             addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
-            if System.bind(serverfd, unsafeCast(&addr), socklen_t(sizeof(addr.dynamicType))) == -1 {
+            if System.bind(serverfd, unsafePointerCast(&addr), socklen_t(sizeof(addr.dynamicType))) == -1 {
                 close(serverfd)
                 throw SocketServerErrorType.SystemError(rawErrno: errno)
             }
@@ -97,7 +97,7 @@ public class TCPServer {
             addr.sin6_flowinfo = 0  // TODO
             addr.sin6_addr = in6_addr() // TODO
             addr.sin6_scope_id = 0  // TODO
-            if System.bind(serverfd, unsafeCast(&addr), socklen_t(sizeof(addr.dynamicType))) == -1 {
+            if System.bind(serverfd, unsafePointerCast(&addr), socklen_t(sizeof(addr.dynamicType))) == -1 {
                 System.close(serverfd)
                 throw SocketServerErrorType.SystemError(rawErrno: errno)
             }
@@ -137,7 +137,7 @@ public class TCPServer {
             if let weakSelf = self, serverfd = weakSelf.serverfd {
                 var addr = sockaddr_in()
                 var addrlen = socklen_t(sizeof(addr.dynamicType))
-                let socketfd = System.accept(serverfd, unsafeCast(&addr), &addrlen)
+                let socketfd = System.accept(serverfd, unsafePointerCast(&addr), &addrlen)
                 if socketfd == -1 {
                     let rawErrno = errno
                     guard rawErrno != ECONNABORTED else {
@@ -170,7 +170,7 @@ public class TCPServer {
             if let weakSelf = self, serverfd = weakSelf.serverfd {
                 var addr = sockaddr_in6()
                 var addrlen = socklen_t(sizeof(addr.dynamicType))
-                let socketfd = System.accept(serverfd, unsafeCast(&addr), &addrlen)
+                let socketfd = System.accept(serverfd, unsafePointerCast(&addr), &addrlen)
                 if socketfd == -1 {
                     let rawErrno = errno
                     guard rawErrno != ECONNABORTED else {
@@ -200,11 +200,11 @@ public class TCPServer {
 
 }
 
-private func unsafeCast<T, R>(value: UnsafePointer<T>) -> UnsafePointer<R> {
+private func unsafePointerCast<T, R>(value: UnsafePointer<T>) -> UnsafePointer<R> {
     return UnsafePointer<R>(value)
 }
 
-private func unsafeCast<T, R>(value: UnsafeMutablePointer<T>) -> UnsafeMutablePointer<R> {
+private func unsafePointerCast<T, R>(value: UnsafeMutablePointer<T>) -> UnsafeMutablePointer<R> {
     return UnsafeMutablePointer<R>(value)
 }
 
