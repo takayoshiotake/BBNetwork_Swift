@@ -62,12 +62,37 @@ class ViewController: NSViewController, HTTPServerDelegate {
     
     // MARK: -
     
-    func httpServer(server: HTTPServer, didConnectConnection connection: HTTPConnection) {
-        defer {
+    func handleWebsocket(httpRequest: HTTPRequest, connection: HTTPConnection) {
+        guard let secWebSoketVersion = httpRequest.requestHeaders["Sec-WebSocket-Version"], secWebSoketKey = httpRequest.requestHeaders["Sec-WebSocket-Key"] where secWebSoketVersion == "13" else {
             connection.close()
+            return
         }
+        
+        func sha1(data: UnsafePointer<UInt8>, len: Int) -> [UInt8] {
+            let md = [UInt8](count: Int(CC_SHA1_DIGEST_LENGTH), repeatedValue: 0)
+            CC_SHA1(data, UInt32(len), UnsafeMutablePointer(md))
+            return md
+        }
+        let key = (secWebSoketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").cStringUsingEncoding(NSUTF8StringEncoding)!
+        let sha1Value = sha1(UnsafePointer(key), len: key.count - 1)
+        let secWebSocketAccept = NSData(bytes: UnsafePointer(sha1Value), length: sha1Value.count).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
+        
+        let httpResponse = HTTPResponse(httpVersion: httpRequest.httpVersion, statusCode: HTTPStatusCode.WithRawValue(intValue: 101, reasonPhrase: "OK"), responseHeaders: [("Upgrade", "websocket"), ("Connection", "upgrade"), ("Sec-WebSocket-Accept", secWebSocketAccept)], body: nil)
+        
+        try! connection.sendResponse(httpResponse)
+        connection.close()
+    }
+    
+    // MARK: -
+    
+    func httpServer(server: HTTPServer, didConnectConnection connection: HTTPConnection) {
         do {
             if let httpRequest = try connection.readRequest() {
+                if httpRequest.requestHeaders["Upgrade"] == "websocket" && httpRequest.requestHeaders["Connection"] == "Upgrade" {
+                    handleWebsocket(httpRequest, connection: connection)
+                    return
+                }
+                
                 print("\(httpRequest)")
                 
                 let bodyText = "Hello, world!"
@@ -75,9 +100,11 @@ class ViewController: NSViewController, HTTPServerDelegate {
                 
                 try connection.sendResponse(httpResponse)
             }
+            connection.close()
         }
         catch let error {
             print("\(error)")
+            connection.close()
         }
     }
     
