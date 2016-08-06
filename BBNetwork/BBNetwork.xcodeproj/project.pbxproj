@@ -26,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		127F97DA1D55BECC0057E043 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		127F97DB1D55BED40057E043 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		12DE6A6B1D2A917900C67A32 /* BBNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BBNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		12DE6A6E1D2A917900C67A32 /* BBNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBNetwork.h; sourceTree = "<group>"; };
 		12DE6A701D2A917900C67A32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 			children = (
 				12DE6A6E1D2A917900C67A32 /* BBNetwork.h */,
 				12DE6A701D2A917900C67A32 /* Info.plist */,
+				127F97DB1D55BED40057E043 /* module.modulemap */,
 			);
 			path = BBNetwork.macOS;
 			sourceTree = "<group>";
@@ -106,6 +109,7 @@
 			children = (
 				12DE6A7B1D2A937800C67A32 /* BBNetwork.h */,
 				12DE6A7D1D2A937800C67A32 /* Info.plist */,
+				127F97DA1D55BECC0057E043 /* module.modulemap */,
 			);
 			path = BBNetwork.iOS;
 			sourceTree = "<group>";
@@ -317,6 +321,7 @@
 				PRODUCT_NAME = BBNetwork;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = BBNetwork.macOS;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -370,6 +375,7 @@
 				PRODUCT_NAME = BBNetwork;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = BBNetwork.macOS;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -427,6 +433,7 @@
 				PRODUCT_NAME = BBNetwork;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = BBNetwork.iOS;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -479,6 +486,7 @@
 				PRODUCT_NAME = BBNetwork;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = BBNetwork.iOS;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";

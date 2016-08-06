@@ -52,3 +52,13 @@ internal class System {
 }
 
 internal let INADDR_ANY: UInt32 = 0
+
+
+// DEBUG:
+import CommonCrypto
+
+public func sha1(data: UnsafePointer<UInt8>, len: Int) -> [UInt8] {
+    let md = [UInt8](count: Int(CC_SHA1_DIGEST_LENGTH), repeatedValue: 0)
+    CC_SHA1(data, UInt32(len), UnsafeMutablePointer(md))
+    return md
+}

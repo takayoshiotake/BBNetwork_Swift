@@ -68,11 +68,6 @@ class ViewController: NSViewController, HTTPServerDelegate {
             return
         }
         
-        func sha1(data: UnsafePointer<UInt8>, len: Int) -> [UInt8] {
-            let md = [UInt8](count: Int(CC_SHA1_DIGEST_LENGTH), repeatedValue: 0)
-            CC_SHA1(data, UInt32(len), UnsafeMutablePointer(md))
-            return md
-        }
         let key = (secWebSoketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").cStringUsingEncoding(NSUTF8StringEncoding)!
         let sha1Value = sha1(UnsafePointer(key), len: key.count - 1)
         let secWebSocketAccept = NSData(bytes: UnsafePointer(sha1Value), length: sha1Value.count).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
