@@ -83,7 +83,7 @@ class ViewController: UIViewController, HTTPServerDelegate {
                 print("\(httpRequest)")
                 
                 let bodyText = "Hello, world!"
-                let httpResponse = HTTPResponse(httpVersion: httpRequest.httpVersion, statusCode: .OK, body: [UInt8](bodyText.utf8))
+                let httpResponse = HTTPResponse(httpVersion: httpRequest.httpVersion, statusCode: .OK, responseHeaders: nil, body: [UInt8](bodyText.utf8))
                 
                 try connection.sendResponse(httpResponse)
             }
