@@ -74,7 +74,7 @@ class ViewController: NSViewController, HTTPServerDelegate {
         
         let httpResponse = HTTPResponse(httpVersion: httpRequest.httpVersion, statusCode: HTTPStatusCode.WithRawValue(intValue: 101, reasonPhrase: "OK"), responseHeaders: [("Upgrade", "websocket"), ("Connection", "upgrade"), ("Sec-WebSocket-Accept", secWebSocketAccept)], body: nil)
         
-        try! connection.sendResponse(httpResponse)
+        _ = try? connection.sendResponse(httpResponse)
         connection.close()
     }
     
