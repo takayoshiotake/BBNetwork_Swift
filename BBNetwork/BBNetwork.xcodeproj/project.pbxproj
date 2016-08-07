@@ -19,8 +19,8 @@
 		12DE6AED1D2AAE3500C67A32 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AE81D2AAE3500C67A32 /* Socket.swift */; };
 		12DE6AEE1D2AAE3500C67A32 /* TCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AE91D2AAE3500C67A32 /* TCPServer.swift */; };
 		12DE6AEF1D2AAE3500C67A32 /* TCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AE91D2AAE3500C67A32 /* TCPServer.swift */; };
-		12DE6AF11D2AAE8900C67A32 /* HTTPConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AF01D2AAE8900C67A32 /* HTTPConnection.swift */; };
-		12DE6AF21D2AAE8900C67A32 /* HTTPConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AF01D2AAE8900C67A32 /* HTTPConnection.swift */; };
+		12DE6AF11D2AAE8900C67A32 /* HTTPSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AF01D2AAE8900C67A32 /* HTTPSocket.swift */; };
+		12DE6AF21D2AAE8900C67A32 /* HTTPSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AF01D2AAE8900C67A32 /* HTTPSocket.swift */; };
 		12DE6AF41D2AAEFF00C67A32 /* HTTPResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AF31D2AAEFF00C67A32 /* HTTPResponse.swift */; };
 		12DE6AF51D2AAEFF00C67A32 /* HTTPResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE6AF31D2AAEFF00C67A32 /* HTTPResponse.swift */; };
 /* End PBXBuildFile section */
@@ -39,7 +39,7 @@
 		12DE6AE71D2AAE3500C67A32 /* HTTPServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPServer.swift; path = BBNetwork/HTTPServer.swift; sourceTree = "<group>"; };
 		12DE6AE81D2AAE3500C67A32 /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Socket.swift; path = BBNetwork/Socket.swift; sourceTree = "<group>"; };
 		12DE6AE91D2AAE3500C67A32 /* TCPServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TCPServer.swift; path = BBNetwork/TCPServer.swift; sourceTree = "<group>"; };
-		12DE6AF01D2AAE8900C67A32 /* HTTPConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPConnection.swift; path = BBNetwork/HTTPConnection.swift; sourceTree = "<group>"; };
+		12DE6AF01D2AAE8900C67A32 /* HTTPSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPSocket.swift; path = BBNetwork/HTTPSocket.swift; sourceTree = "<group>"; };
 		12DE6AF31D2AAEFF00C67A32 /* HTTPResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPResponse.swift; path = BBNetwork/HTTPResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,7 +78,7 @@
 				12DE6AE91D2AAE3500C67A32 /* TCPServer.swift */,
 				12DE6AE81D2AAE3500C67A32 /* Socket.swift */,
 				12DE6AE71D2AAE3500C67A32 /* HTTPServer.swift */,
-				12DE6AF01D2AAE8900C67A32 /* HTTPConnection.swift */,
+				12DE6AF01D2AAE8900C67A32 /* HTTPSocket.swift */,
 				12DE6AE41D2AAE0900C67A32 /* HTTPRequest.swift */,
 				12DE6AF31D2AAEFF00C67A32 /* HTTPResponse.swift */,
 			);
@@ -229,7 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				12DE6AEC1D2AAE3500C67A32 /* Socket.swift in Sources */,
-				12DE6AF11D2AAE8900C67A32 /* HTTPConnection.swift in Sources */,
+				12DE6AF11D2AAE8900C67A32 /* HTTPSocket.swift in Sources */,
 				12DE6AEE1D2AAE3500C67A32 /* TCPServer.swift in Sources */,
 				12DE6AE51D2AAE0900C67A32 /* HTTPRequest.swift in Sources */,
 				12DE6AA51D2AAA8400C67A32 /* System.swift in Sources */,
@@ -243,7 +243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				12DE6AED1D2AAE3500C67A32 /* Socket.swift in Sources */,
-				12DE6AF21D2AAE8900C67A32 /* HTTPConnection.swift in Sources */,
+				12DE6AF21D2AAE8900C67A32 /* HTTPSocket.swift in Sources */,
 				12DE6AEF1D2AAE3500C67A32 /* TCPServer.swift in Sources */,
 				12DE6AE61D2AAE0900C67A32 /* HTTPRequest.swift in Sources */,
 				12DE6AA61D2AAA8400C67A32 /* System.swift in Sources */,
