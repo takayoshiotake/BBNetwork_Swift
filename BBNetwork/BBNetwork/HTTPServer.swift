@@ -7,7 +7,7 @@
 import Foundation
 
 public protocol HTTPServerDelegate: class {
-    func httpServer(server: HTTPServer, didConnectConnection connection: HTTPConnection)
+    func httpServer(server: HTTPServer, didConnect socket: HTTPSocket)
 }
 
 public class HTTPServer: TCPServerDelegate {
@@ -28,9 +28,9 @@ public class HTTPServer: TCPServerDelegate {
         tcpServer.stop()
     }
     
-    private func httpCommunication(socket: Socket) {
+    private func communicate(socket: Socket) {
         if let delegate = delegate {
-            delegate.httpServer(self, didConnectConnection: HTTPConnection(socket: socket))
+            delegate.httpServer(self, didConnect: HTTPSocket(socket: socket))
         }
         else {
             socket.close()
@@ -40,7 +40,7 @@ public class HTTPServer: TCPServerDelegate {
     // MARK: - TCPServerDelegate
     
     public func tcpServer(server: TCPServer, didAcceptSocket socket: Socket) {
-        httpCommunication(socket)
+        communicate(socket)
     }
     
     public func tcpServer(server: TCPServer, didError error: SocketServerErrorType) {

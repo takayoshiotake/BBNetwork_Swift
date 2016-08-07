@@ -77,20 +77,20 @@ class ViewController: UIViewController, HTTPServerDelegate {
     
     // MARK: -
     
-    func httpServer(server: HTTPServer, didConnectConnection connection: HTTPConnection) {
+    func httpServer(server: HTTPServer, didConnect socket: HTTPSocket) {
         do {
-            if let httpRequest = try connection.readRequest() {
-                print("\(httpRequest)")
+            if let request = try socket.readRequest() {
+                print("\(request)")
                 
                 let bodyText = "Hello, world!"
-                let httpResponse = HTTPResponse(httpVersion: httpRequest.httpVersion, statusCode: .OK, responseHeaders: nil, body: [UInt8](bodyText.utf8))
+                let response = HTTPResponse(httpVersion: request.httpVersion, statusCode: .OK, headers: nil, body: [UInt8](bodyText.utf8))
                 
-                try connection.sendResponse(httpResponse)
+                try socket.sendResponse(response)
             }
         }
         catch {
         }
-        connection.close()
+        socket.close()
     }
     
 }

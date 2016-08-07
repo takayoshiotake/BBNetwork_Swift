@@ -62,9 +62,9 @@ class ViewController: NSViewController, HTTPServerDelegate {
     
     // MARK: -
     
-    func handleWebsocket(httpRequest: HTTPRequest, connection: HTTPConnection) {
-        guard let secWebSoketVersion = httpRequest.requestHeaders["Sec-WebSocket-Version"], secWebSoketKey = httpRequest.requestHeaders["Sec-WebSocket-Key"] where secWebSoketVersion == "13" else {
-            connection.close()
+    func handleWebsocket(request: HTTPRequest, socket: HTTPSocket) {
+        guard let secWebSoketVersion = request.headers["Sec-WebSocket-Version"], secWebSoketKey = request.headers["Sec-WebSocket-Key"] where secWebSoketVersion == "13" else {
+            socket.close()
             return
         }
         
@@ -72,34 +72,34 @@ class ViewController: NSViewController, HTTPServerDelegate {
         let sha1Value = sha1(UnsafePointer(key), len: key.count - 1)
         let secWebSocketAccept = NSData(bytes: UnsafePointer(sha1Value), length: sha1Value.count).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
         
-        let httpResponse = HTTPResponse(httpVersion: httpRequest.httpVersion, statusCode: HTTPStatusCode.WithRawValue(intValue: 101, reasonPhrase: "OK"), responseHeaders: [("Upgrade", "websocket"), ("Connection", "upgrade"), ("Sec-WebSocket-Accept", secWebSocketAccept)], body: nil)
+        let httpResponse = HTTPResponse(httpVersion: request.httpVersion, statusCode: HTTPStatusCode.WithRawValue(intValue: 101, reasonPhrase: "OK"), headers: [("Upgrade", "websocket"), ("Connection", "upgrade"), ("Sec-WebSocket-Accept", secWebSocketAccept)], body: nil)
         
-        _ = try? connection.sendResponse(httpResponse)
-        connection.close()
+        _ = try? socket.sendResponse(httpResponse)
+        socket.close()
     }
     
     // MARK: -
     
-    func httpServer(server: HTTPServer, didConnectConnection connection: HTTPConnection) {
+    func httpServer(server: HTTPServer, didConnect socket: HTTPSocket) {
         do {
-            if let httpRequest = try connection.readRequest() {
-                if httpRequest.requestHeaders["Upgrade"] == "websocket" && httpRequest.requestHeaders["Connection"] == "Upgrade" {
-                    handleWebsocket(httpRequest, connection: connection)
+            if let request = try socket.readRequest() {
+                if request.headers["Upgrade"] == "websocket" && request.headers["Connection"] == "Upgrade" {
+                    handleWebsocket(request, socket: socket)
                     return
                 }
                 
-                print("\(httpRequest)")
+                print("\(request)")
                 
                 let bodyText = "Hello, world!"
-                let httpResponse = HTTPResponse(httpVersion: httpRequest.httpVersion, statusCode: .OK, responseHeaders: nil, body: [UInt8](bodyText.utf8))
+                let httpResponse = HTTPResponse(httpVersion: request.httpVersion, statusCode: .OK, headers: nil, body: [UInt8](bodyText.utf8))
                 
-                try connection.sendResponse(httpResponse)
+                try socket.sendResponse(httpResponse)
             }
-            connection.close()
+            socket.close()
         }
         catch let error {
             print("\(error)")
-            connection.close()
+            socket.close()
         }
     }
     

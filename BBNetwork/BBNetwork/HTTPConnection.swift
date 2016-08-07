@@ -1,12 +1,12 @@
 //
-//  HTTPConnection.swift
+//  HTTPSocket.swift
 //
 //  Copyright © 2016 OTAKE Takayoshi. All rights reserved.
 //
 
 import Foundation
 
-public class HTTPConnection {
+public class HTTPSocket {
     private let socket: Socket
     private var buffer: [UInt8]?
     
@@ -59,16 +59,16 @@ public extension HTTPRequest {
                 return nil
             }
             let method: String
-            let requestURI: String
+            let uri: String
             let httpVersion: String
-            var requestHeaders: [String: String] = [:]
+            var headers: [String: String] = [:]
             do {
                 let temp = lines.first!.componentsSeparatedByString(" ")
                 if temp.count != 3 {
                     return nil
                 }
                 method = temp[0]
-                requestURI = temp[1]
+                uri = temp[1]
                 httpVersion = temp[2]
             }
             for line in lines[1..<lines.count] {
@@ -79,13 +79,13 @@ public extension HTTPRequest {
                         value = String(value.characters.dropFirst())
                     }
                     // TODO: Check field is not duplicated
-                    requestHeaders[field] = value
+                    headers[field] = value
                 }
                 else {
                     return nil
                 }
             }
-            self.init(method: method, requestURI: requestURI, httpVersion: httpVersion, requestHeaders: requestHeaders)
+            self.init(method: method, uri: uri, httpVersion: httpVersion, headers: headers)
         }
         else {
             return nil

@@ -33,24 +33,24 @@ public enum HTTPStatusCode {
 public struct HTTPResponse {
     public let httpVersion: String
     public let statusCode: HTTPStatusCode
-    public let responseHeaders: [(String, String)]?
+    public let headers: [(String, String)]?
     public let body: [UInt8]?
     
     public var responseLine: String {
         return "\(httpVersion) \(statusCode.intValue) \(statusCode.reasonPhrase)"
     }
     
-    public init(httpVersion: String, statusCode: HTTPStatusCode, responseHeaders: [(String, String)]?, body: [UInt8]?) {
+    public init(httpVersion: String, statusCode: HTTPStatusCode, headers: [(String, String)]?, body: [UInt8]?) {
         self.httpVersion = httpVersion
         self.statusCode = statusCode
-        self.responseHeaders = responseHeaders
+        self.headers = headers
         self.body = body
     }
     
     public func bytes() -> [UInt8] {
         var str = responseLine + "\r\n"
-        if let responseHeaders = responseHeaders {
-            for (key, value) in responseHeaders {
+        if let headers = headers {
+            for (key, value) in headers {
                 str += "\(key): \(value)\r\n"
             }
         }

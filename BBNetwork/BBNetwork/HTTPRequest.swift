@@ -8,7 +8,7 @@ import Foundation
 
 public struct HTTPRequest {
     public let method: String
-    public let requestURI: String
+    public let uri: String
     public let httpVersion: String
-    public let requestHeaders: [String: String]
+    public let headers: [String: String]
 }
