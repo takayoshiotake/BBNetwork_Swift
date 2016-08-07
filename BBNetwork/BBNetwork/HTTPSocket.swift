@@ -7,18 +7,17 @@
 import Foundation
 
 public class HTTPSocket {
-    private let socket: Socket
-    private var buffer: [UInt8]?
+    public let rawSocket: Socket
     
     public init(socket: Socket) {
-        self.socket = socket
+        rawSocket = socket
     }
     
     public func readRequest() throws -> HTTPRequest? {
         let asciiCR = 0x0d as UInt8
         let asciiLF = 0x0a as UInt8
         
-        var requestBuffer = try socket.peek(1024)
+        var requestBuffer = try rawSocket.peek(1024)
         
         var requestEndIndex = -1
         var ii = 0
@@ -34,16 +33,16 @@ public class HTTPSocket {
             return nil
         }
         
-        requestBuffer = try socket.recv(requestEndIndex)
+        requestBuffer = try rawSocket.recv(requestEndIndex)
         return HTTPRequest(bytes: requestBuffer, count: requestEndIndex)
     }
     
     public func sendResponse(httpResponse: HTTPResponse) throws {
-        try socket.send(httpResponse.bytes())
+        try rawSocket.send(httpResponse.bytes())
     }
     
     public func close() {
-        socket.close()
+        rawSocket.close()
     }
 }
 

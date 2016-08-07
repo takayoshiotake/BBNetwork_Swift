@@ -75,6 +75,73 @@ class ViewController: NSViewController, HTTPServerDelegate {
         let httpResponse = HTTPResponse(httpVersion: request.httpVersion, statusCode: HTTPStatusCode.WithRawValue(intValue: 101, reasonPhrase: "OK"), headers: [("Upgrade", "websocket"), ("Connection", "upgrade"), ("Sec-WebSocket-Accept", secWebSocketAccept)], body: nil)
         
         _ = try? socket.sendResponse(httpResponse)
+        
+        // DEBUG:
+        while true {
+            do {
+                let head = try socket.rawSocket.recv(2)
+                if head.count == 0 {
+                    break
+                }
+                
+                let isFinalFragment = head[0] >> 7 != 0
+                let reserved = (head[0] >> 4) & 0x3
+                if reserved != 0 {
+                    break
+                }
+                let opcode = head[0] & 0xF
+                print("WebSocket: opcode=\(opcode)")
+                var payload: [UInt8] = []
+                if head.count >= 2 {
+                    let isMasked = head[1] >> 7 != 0
+                    if !isMasked {
+                        // All frames sent from client to server must be masked
+                        break
+                    }
+                    var payloadLength = Int(head[1] & 0x7F)
+                    switch payloadLength {
+                    case 126:
+                        // TODO:
+                        break
+                    case 127:
+                        // TODO:
+                        break
+                    default:
+                        // Nothing to do
+                        break
+                    }
+                    
+                    let maskingKey = try socket.rawSocket.recv(4)
+                    if maskingKey.count != 4 {
+                        break
+                    }
+                    
+                    if payloadLength > 0 {
+                        let maskedPayload = try socket.rawSocket.recv(payloadLength)
+                        payload = [UInt8](count: payloadLength, repeatedValue: 0)
+                        for pi in 0..<payloadLength {
+                            payload[pi] = maskedPayload[pi] ^ maskingKey[pi % 4]
+                        }
+                    }
+                }
+                
+                if opcode == 1 {
+                    // Data frame as UTF-8 text
+                    if let text = String(bytes: payload, encoding: NSUTF8StringEncoding) {
+                        print("text=\(text)")
+                    }
+                }
+                else if opcode == 8 {
+                    // Close frame
+                    break
+                }
+            }
+            catch let error {
+                print("\(error)")
+                break
+            }
+        }
+        
         socket.close()
     }
     
