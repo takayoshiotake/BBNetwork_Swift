@@ -26,9 +26,9 @@ class ViewController: UIViewController, HTTPServerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(applicationWillResignActive(_:)), name: UIApplicationWillResignActiveNotification, object: nil)
-        httpServer = HTTPServer(tcpServer: TCPServer(supportedProtocol: .IPv6, port: 8080))
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillResignActive(_:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        httpServer = HTTPServer(tcpServer: TCPServer(supportedProtocol: .iPv6, port: 8080))
         httpServer.delegate = self
     }
     
@@ -37,23 +37,23 @@ class ViewController: UIViewController, HTTPServerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         appears = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         appears = false
         super.viewWillDisappear(animated)
     }
     
     // MARK: -
     
-    func applicationDidBecomeActive(notification: NSNotification) {
+    func applicationDidBecomeActive(_ notification: Notification) {
         isActive = true
     }
     
-    func applicationWillResignActive(notification: NSNotification) {
+    func applicationWillResignActive(_ notification: Notification) {
         isActive = false
     }
     
@@ -64,7 +64,7 @@ class ViewController: UIViewController, HTTPServerDelegate {
             do {
                 try httpServer.start()
             }
-            catch SocketServerErrorType.SystemError(let rawErrno) {
+            catch SocketServerErrorType.systemError(let rawErrno) {
                 print("System error: \(errnoDescription(rawErrno))")
             }
             catch {
@@ -77,13 +77,13 @@ class ViewController: UIViewController, HTTPServerDelegate {
     
     // MARK: -
     
-    func httpServer(server: HTTPServer, didConnect socket: HTTPSocket) {
+    func httpServer(_ server: HTTPServer, didConnect socket: HTTPSocket) {
         do {
             if let request = try socket.readRequest() {
                 print("\(request)")
                 
                 let bodyText = "Hello, world!"
-                let response = HTTPResponse(httpVersion: request.httpVersion, statusCode: .OK, headers: nil, body: [UInt8](bodyText.utf8))
+                let response = HTTPResponse(httpVersion: request.httpVersion, statusCode: .ok, headers: nil, body: [UInt8](bodyText.utf8))
                 
                 try socket.sendResponse(response)
             }
@@ -95,10 +95,10 @@ class ViewController: UIViewController, HTTPServerDelegate {
     
 }
 
-private func gaiErrnoDescription(gaiErrno: Int32) -> String {
-    return String.fromCString(Darwin.gai_strerror(gaiErrno))! + " (\(gaiErrno))"
+private func gaiErrnoDescription(_ gaiErrno: Int32) -> String {
+    return String(cString: Darwin.gai_strerror(gaiErrno)) + " (\(gaiErrno))"
 }
 
-private func errnoDescription(rawErrno: Int32) -> String {
-    return String.fromCString(Darwin.strerror(rawErrno))! + " (\(rawErrno))"
+private func errnoDescription(_ rawErrno: Int32) -> String {
+    return String(cString: Darwin.strerror(rawErrno)) + " (\(rawErrno))"
 }

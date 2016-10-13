@@ -8,23 +8,23 @@ import Foundation
 
 /// HTTP/1.1 standard; RFC 7231
 public enum HTTPStatusCode {
-    case OK
-    case WithRawValue(intValue: Int, reasonPhrase: String)
+    case ok
+    case withRawValue(intValue: Int, reasonPhrase: String)
     
     var intValue: Int {
         switch self {
-        case .OK:
+        case .ok:
             return 200
-        case .WithRawValue(let intValue, _):
+        case .withRawValue(let intValue, _):
             return intValue
         }
     }
     
     var reasonPhrase: String {
         switch self {
-        case .OK:
+        case .ok:
             return "OK"
-        case .WithRawValue(_, let reasonPhrase):
+        case .withRawValue(_, let reasonPhrase):
             return reasonPhrase
         }
     }

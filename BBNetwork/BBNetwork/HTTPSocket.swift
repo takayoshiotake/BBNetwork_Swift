@@ -6,14 +6,14 @@
 
 import Foundation
 
-public class HTTPSocket {
-    public let rawSocket: Socket
+open class HTTPSocket {
+    open let rawSocket: Socket
     
     public init(socket: Socket) {
         rawSocket = socket
     }
     
-    public func readRequest() throws -> HTTPRequest? {
+    open func readRequest() throws -> HTTPRequest? {
         let asciiCR = 0x0d as UInt8
         let asciiLF = 0x0a as UInt8
         
@@ -37,18 +37,18 @@ public class HTTPSocket {
         return HTTPRequest(bytes: requestBuffer, count: requestEndIndex)
     }
     
-    public func sendResponse(httpResponse: HTTPResponse) throws {
+    open func sendResponse(_ httpResponse: HTTPResponse) throws {
         try rawSocket.send(httpResponse.bytes())
     }
     
-    public func close() {
+    open func close() {
         rawSocket.close()
     }
 }
 
 public extension HTTPRequest {
-    private init?(bytes: ArraySlice<UInt8>, count: Int) {
-        if let requestText = String(bytes: bytes[0..<count-2], encoding: NSUTF8StringEncoding) {
+    fileprivate init?(bytes: ArraySlice<UInt8>, count: Int) {
+        if let requestText = String(bytes: bytes[0..<count-2], encoding: String.Encoding.utf8) {
             // The last empty line is removed
             var lines: [String] = []
             requestText.enumerateLines { (line, stop) in
@@ -62,7 +62,7 @@ public extension HTTPRequest {
             let httpVersion: String
             var headers: [String: String] = [:]
             do {
-                let temp = lines.first!.componentsSeparatedByString(" ")
+                let temp = lines.first!.components(separatedBy: " ")
                 if temp.count != 3 {
                     return nil
                 }
@@ -71,9 +71,9 @@ public extension HTTPRequest {
                 httpVersion = temp[2]
             }
             for line in lines[1..<lines.count] {
-                if let separatorIndex = line.characters.indexOf(":") where separatorIndex < line.endIndex {
-                    let field = line.substringToIndex(separatorIndex)
-                    var value = line.substringFromIndex(separatorIndex.advancedBy(1))
+                if let separatorIndex = line.characters.index(of: ":") , separatorIndex < line.endIndex {
+                    let field = line.substring(to: separatorIndex)
+                    var value = line.substring(from: line.index(separatorIndex, offsetBy: 1))
                     if value.characters.first == " " {
                         value = String(value.characters.dropFirst())
                     }

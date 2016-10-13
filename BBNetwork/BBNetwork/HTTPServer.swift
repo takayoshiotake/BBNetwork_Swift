@@ -7,28 +7,28 @@
 import Foundation
 
 public protocol HTTPServerDelegate: class {
-    func httpServer(server: HTTPServer, didConnect socket: HTTPSocket)
+    func httpServer(_ server: HTTPServer, didConnect socket: HTTPSocket)
 }
 
-public class HTTPServer: TCPServerDelegate {
-    private var tcpServer: TCPServer
+open class HTTPServer: TCPServerDelegate {
+    fileprivate var tcpServer: TCPServer
     
-    public var delegate: HTTPServerDelegate?
+    open var delegate: HTTPServerDelegate?
     
     public init(tcpServer: TCPServer) {
         self.tcpServer = tcpServer
         self.tcpServer.delegate = self
     }
     
-    public func start() throws {
+    open func start() throws {
         try tcpServer.start()
     }
     
-    public func stop() {
+    open func stop() {
         tcpServer.stop()
     }
     
-    private func communicate(socket: Socket) {
+    fileprivate func communicate(_ socket: Socket) {
         if let delegate = delegate {
             delegate.httpServer(self, didConnect: HTTPSocket(socket: socket))
         }
@@ -39,11 +39,11 @@ public class HTTPServer: TCPServerDelegate {
     
     // MARK: - TCPServerDelegate
     
-    public func tcpServer(server: TCPServer, didAcceptSocket socket: Socket) {
+    open func tcpServer(_ server: TCPServer, didAcceptSocket socket: Socket) {
         communicate(socket)
     }
     
-    public func tcpServer(server: TCPServer, didError error: SocketServerErrorType) {
+    open func tcpServer(_ server: TCPServer, didError error: SocketServerErrorType) {
     }
 
 }
